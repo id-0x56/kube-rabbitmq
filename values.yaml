@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: rabbitmq
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "3-management-alpine"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -16,7 +16,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -38,7 +38,8 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  targetPort: 5672
+  port: 5672
 
 ingress:
   enabled: false
@@ -80,3 +81,17 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+livenessProbe:
+  initialDelaySeconds: 300
+  periodSeconds: 15
+  timeoutSeconds: 10
+
+readinessProbe:
+  initialDelaySeconds: 300
+  periodSeconds: 15
+  timeoutSeconds: 10
+
+auth:
+  username: "username"
+  password: "password"
